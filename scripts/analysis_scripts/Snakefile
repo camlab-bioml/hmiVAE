@@ -1,0 +1,66 @@
+# Snakefile for making umaps
+
+import pandas as pd 
+import numpy as np 
+import os
+
+#cohorts = ['Jackson-BC', 'Ali-BC', 'Hoch-Melanoma']
+cohorts = ['PDAC']
+#cofactors = {'Jackson-BC': 5.0, 'Ali-BC': 0.8, 'Hoch-Melanoma': 1.0}
+cofactors = {'PDAC': 1.0}
+
+
+# runs = {
+#     'basel': [1,64, 20, 123, 7874,],#'basel_vae_out_nh1_hd64_ls20_rs123_bs7874','epoch=1_step=152_recon_lik_test=-3.903.ckpt'],
+#     'melanoma':[1,64,10,123,19130,],#'melanoma_vae_out_nh1_hd64_ls10_rs123_bs19130','epoch=2_step=114_recon_lik_test=-36.515.ckpt'],
+#     'metabric':[1,32,20,1234,3430,],#'metabric_vae_out_nh1_hd32_ls20_rs1234_bs3430','epoch=1_step=220_recon_lik_test=-34.515.ckpt'],
+# } # old
+
+# runs = {
+#     'Ali-BC': [2, 32, 20, 'warmup', 1234, 4000,'Ali-BC_vae_out_nh2_hd32_ls20_betawarmup_rs1234_bs4000'],
+#     'Jackson-BC': [1, 64, 20, 'warmup', 123, 8000, 'Jackson-BC_vae_out_nh1_hd64_ls20_betawarmup_rs123_bs8000'],
+#     'Hoch-Melanoma': [1, 64, 20, 'warmup', 123, 16000, 'Hoch-Melanoma_vae_out_nh1_hd64_ls20_betawarmup_rs123_bs16000'],
+# } # most recent
+
+runs = {
+    'PDAC': [1, 32, 20, 'warmup', 1, 1000,'PDAC_vae_out_nh1_hd32_ls20_betawarmup_rs1_bs1000']
+}
+
+#outputs = expand("../../analysis/cluster_analysis/{cohort}/best_run_{cohort}_out/{cohort}_adata_new.h5ad", cohort=cohorts)
+outputs = expand("../../analysis/pdac_analysis/best_run_{cohort}_out/{cohort}_adata_new.h5ad", cohort=cohorts)
+
+rule all:
+    input:
+        outputs,
+
+rule make_umaps:
+    output:
+        "../../analysis/pdac_analysis/best_run_{cohort}_out/{cohort}_adata_new.h5ad",
+    input:
+        adata = "../../analysis/pdac_analysis/vae_prep/all_samples_merged_vae.h5ad"
+    params:
+        n_hidden = lambda wildcards: runs[wildcards.cohort][0],
+        hidden_dim = lambda wildcards: runs[wildcards.cohort][1],
+        latent_dim = lambda wildcards: runs[wildcards.cohort][2],
+        beta_scheme = lambda wildcards: runs[wildcards.cohort][3],
+        random_seed = lambda wildcards: runs[wildcards.cohort][4],
+        batch_size = lambda wildcards: runs[wildcards.cohort][5],
+        cofactor = lambda wildcards: cofactors[wildcards.cohort],
+        best_epoch_dir = lambda wildcards: f"/home/campbell/sayub/final_hmivae/analysis/pdac_analysis/hyperparams_tuning/{runs[wildcards.cohort][-1]}",
+        output_dir = lambda wildcards: f"../../analysis/pdac_analysis/best_run_{wildcards.cohort}_out/",
+        #cohort = lambda wildcards: wildcards.cohort,
+    
+    shell:
+        "python ../make_umaps.py --adata {input.adata} "
+        "--cofactor {params.cofactor} --cohort {wildcards.cohort} "
+        "--batch_size {params.batch_size} "
+        "--beta_scheme {params.beta_scheme} "
+        "--hidden_dim_size {params.hidden_dim}  "
+        "--latent_dim {params.latent_dim} "
+        "--random_seed {params.random_seed} "
+        "--n_hidden {params.n_hidden} "
+        "--checkpoint_dir {params.best_epoch_dir} "
+        "--output_dir {params.output_dir} "
+
+        
+

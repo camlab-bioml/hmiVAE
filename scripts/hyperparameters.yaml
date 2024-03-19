@@ -1,0 +1,82 @@
+N_cells: 802591
+N_features: 73
+batch_size: 15000
+beta_scheme: constant
+cofactor: 5.0
+hidden_dim_size: 34
+latent_dim: 10
+n_hidden: 1
+random_seed: 123
+raw_adata_corr_max: !!python/object/apply:numpy.core.multiarray._reconstruct
+  args:
+  - &id001 !!python/name:anndata._core.views.ArrayView ''
+  - !!python/tuple
+    - 0
+  - !!binary |
+    Yg==
+  state: !!python/tuple
+  - 1
+  - !!python/tuple []
+  - &id002 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - false
+  - !!binary |
+    ////////7z8=
+raw_adata_corr_min: !!python/object/apply:numpy.core.multiarray._reconstruct
+  args:
+  - *id001
+  - !!python/tuple
+    - 0
+  - !!binary |
+    Yg==
+  state: !!python/tuple
+  - 1
+  - !!python/tuple []
+  - *id002
+  - false
+  - !!binary |
+    OAAAAAAA8L8=
+raw_adata_exp_max: !!python/object/apply:numpy.core.multiarray.scalar
+- &id003 !!python/object/apply:numpy.dtype
+  args:
+  - f4
+  - false
+  - true
+  state: !!python/tuple
+  - 3
+  - <
+  - null
+  - null
+  - null
+  - -1
+  - -1
+  - 0
+- !!binary |
+  yFx0RQ==
+raw_adata_exp_min: !!python/object/apply:numpy.core.multiarray.scalar
+- *id003
+- !!binary |
+  AAAAAA==
+raw_adata_morph_max: !!python/object/apply:numpy.core.multiarray.scalar
+- *id002
+- !!binary |
+  AAAAAABQi0A=
+raw_adata_morph_min: !!python/object/apply:numpy.core.multiarray.scalar
+- *id002
+- !!binary |
+  AAAAAAAAAAA=
+training_time_mins: 1.1920928955078126e-08
+use_covs: true
+use_weights: true

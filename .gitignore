@@ -1,0 +1,10 @@
+.DS_Store
+
+
+scripts/.snakemake
+
+scripts/__pycache__
+
+scripts/wandb
+
+

@@ -1,0 +1,7 @@
+Building DAG of jobs...
+MissingInputException in line 30 of /home/campbell/sayub/final_hmivae/scripts/analysis_scripts/Snakefile:
+Missing input files for rule make_umaps:
+    output: ../final_hmivae/analysis/cluster_analysis/Jackson-BC/best_run_Jackson-BC_out/Jackson-BC_adata_new.h5ad
+    wildcards: cohort=Jackson-BC
+    affected files:
+        ../final_hmivae/analysis/cluster_analysis/Jackson-BC/vae_prep/all_samples_merged_vae.h5ad

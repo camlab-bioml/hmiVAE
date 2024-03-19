@@ -1,0 +1,5 @@
+Building DAG of jobs...
+MissingInputException in line 32 of /home/campbell/sayub/final_hmivae/scripts/analysis_scripts/Snakefile:
+Missing input files for rule all:
+    affected files:
+        ../../analysis/pdac_analysis/best_run_PDAC_out/PDAC_adata_new.h5ad
