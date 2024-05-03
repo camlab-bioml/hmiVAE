@@ -7,4 +7,12 @@ scripts/__pycache__
 
 scripts/wandb
 
+scripts/.DS_Store
 
+scripts/analysis_scripts/.snakemake
+
+
+scripts/hmivae/__pycache__
+
+
+scripts/hmivae/.ipynb_checkpoints
