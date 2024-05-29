@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+src/hmiVAE/ScModeDataloader.py
+src/hmiVAE/__init__.py
+src/hmiVAE/_hmivae_base_components.py
+src/hmiVAE/_hmivae_model.py
+src/hmiVAE/_hmivae_module.py
+src/hmiVAE.egg-info/PKG-INFO
+src/hmiVAE.egg-info/SOURCES.txt
+src/hmiVAE.egg-info/dependency_links.txt
+src/hmiVAE.egg-info/top_level.txt
