@@ -12,7 +12,23 @@ description = "hmiVAE: highly multiplexed imaging Variational AutoEncoder"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
     "License :: OSI Approved :: GNU General Public License v2.0",
     "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research"
 ]
+keywords = ["imaging mass cytometry variational autoencoder"]
+
+dependencies = [
+  "numpy",
+  "pandas",
+  "scikit-learn",
+  "scipy",
+  "torch",
+  "pytorch-lightning",
+  "scanpy",
+  "anndata",
+  "wandb",
+  "typing"
+]
+
