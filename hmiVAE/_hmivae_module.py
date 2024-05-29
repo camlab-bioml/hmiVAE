@@ -41,12 +41,9 @@ class hmiVAE(pl.LightningModule):
         n_epochs_kl_warmup: Union[int, None] = 10,
     ):
         super().__init__()
-        # hidden_dim = E_me + E_cr + E_mr + E_sc
         self.n_steps_kl_warmup = n_steps_kl_warmup
         self.n_epochs_kl_warmup = n_epochs_kl_warmup
         self.n_covariates = n_covariates
-
-        # self.cat_list = cat_list
 
         self.batch_correct = batch_correct
 
@@ -194,7 +191,6 @@ class hmiVAE(pl.LightningModule):
         ## Correlations
         dec_x_std_corr = torch.exp(dec_x_logstd_corr)
         p_rec_corr = torch.distributions.Normal(dec_x_mu_corr, dec_x_std_corr + 1e-6)
-        #log_p_xz_corr = p_rec_corr.log_prob(s)
         if weights is None:
             log_p_xz_corr = p_rec_corr.log_prob(s)
         else:
@@ -300,7 +296,6 @@ class hmiVAE(pl.LightningModule):
         S = train_batch[1]
         M = train_batch[2]
         spatial_context = train_batch[3]
-        # batch_idx = train_batch[-1]
         if self.use_weights:
             weights = train_batch[5]
         else:
@@ -371,8 +366,6 @@ class hmiVAE(pl.LightningModule):
                 )
         else:
             beta = 1.0
-
-        #print('beta=', beta)
 
         if self.leave_out_view is not None:
             if self.leave_out_view == "expression":
@@ -481,14 +474,9 @@ class hmiVAE(pl.LightningModule):
         test_loss = torch.empty(size=[len(batch_idx), n_classes])
         elbo_full = torch.empty(size=[len(batch_idx), n_classes])
 
-        #for i in range(L_iter): 
         for i in range(n_classes):
 
             if self.batch_correct:
-                # one_hot = self.random_one_hot(
-                #     n_classes=n_classes, n_samples=len(batch_idx)
-                # ).type_as(Y)
-
                 one_hot_zeros = torch.zeros(size=[1, n_classes])
 
                 one_hot_zeros[0,i] = 1.0
@@ -586,7 +574,6 @@ class hmiVAE(pl.LightningModule):
 
         self.log(
             "test_loss",
-            #sum(test_loss) / L_iter,
             test_loss.mean(1).mean(),
             on_step=True,
             on_epoch=True,
@@ -686,24 +673,14 @@ class hmiVAE(pl.LightningModule):
         indices: Optional[Sequence[int]] = None,
         give_mean: bool = True,
         view_specific_embeddings: Optional[bool] = True,
-        # idx = None,
     ) -> np.ndarray:
         """
         Return the latent representation of each cell.
         """
-        #if self.leave_out_view is None:
         Y = data.Y
         S = data.S
         M = data.M
         C = data.C
-        # batch_idx = idx
-        # print(batch_idx)
-        # if self.use_covs:
-        #     categories = data.BKG
-        #     n_cats = categories.shape[1]
-        # else:
-        #     categories = torch.Tensor([])
-        #     n_cats = 0
         if use_covs:
             categories = data.BKG
             n_classes = n_covariates - categories.shape[1]
@@ -715,19 +692,6 @@ class hmiVAE(pl.LightningModule):
             one_hot = self.random_one_hot(
                     n_classes=n_classes, n_samples=Y.shape[0]
                 ).type_as(Y)
-            # one_hot = data.samples_onehot
-            # if one_hot.shape[1] < self.n_covariates - n_cats:
-            #     zeros_pad = torch.Tensor(
-            #         np.zeros(
-            #             [
-            #                 one_hot.shape[0],
-            #                 (self.n_covariates - n_cats) - one_hot.shape[1],
-            #             ]
-            #         )
-            #     )
-            #     one_hot = torch.cat([one_hot, zeros_pad], 1)
-            # else:
-            #     one_hot = one_hot
 
             cov_list = torch.cat([one_hot, categories], 1).float()
         else:
@@ -764,5 +728,4 @@ class hmiVAE(pl.LightningModule):
         Generates a random one hot encoded matrix.
         From:  https://stackoverflow.com/questions/45093615/random-one-hot-matrix-in-numpy
         """
-        # x = np.eye(n_classes)
         return torch.Tensor(np.eye(n_classes)[np.random.choice(n_classes, n_samples)])

@@ -70,10 +70,6 @@ class EncoderHMIVAE(nn.Module):
         cov_list=torch.Tensor([]),
     ):
 
-        #included_views = []
-
-        #if self.leave_out_view is None:
-
         h_mean = F.elu(self.input_exp(x_mean))
         h_mean2 = F.elu(self.exp_hidden(h_mean))
 
@@ -94,41 +90,6 @@ class EncoderHMIVAE(nn.Module):
         h = torch.cat(
             [h_mean2, h_correlations2, h_morphology2, h_spatial_context2, h_cov], 1
         ).type_as(x_mean)
-        #else:
-            # if self.leave_out_view != "expression":
-            #     h_mean = F.elu(self.input_exp(x_mean))
-            #     h_mean2 = F.elu(self.exp_hidden(h_mean))
-
-            #     included_views.append(h_mean2)
-
-            # if self.leave_out_view != "correlation":
-            #     h_correlations = F.elu(self.input_corr(x_correlations))
-            #     h_correlations2 = F.elu(self.corr_hidden(h_correlations))
-
-            #     included_views.append(h_correlations2)
-
-            # if self.leave_out_view != "morphology":
-            #     h_morphology = F.elu(self.input_morph(x_morphology))
-            #     h_morphology2 = F.elu(self.morph_hidden(h_morphology))
-
-            #     included_views.append(h_morphology2)
-
-            # if self.leave_out_view != "spatial":
-            #     h_spatial_context = F.elu(self.input_spatial_context(x_spatial_context))
-            #     h_spatial_context2 = F.elu(
-            #         self.spatial_context_hidden(h_spatial_context)
-            #     )
-
-            #     included_views.append(h_spatial_context2)
-
-            # if cov_list.shape[0] > 1:
-            #     h_cov = F.elu(self.input_cov(cov_list))
-            #     included_views.append(h_cov)
-            # else:
-            #     h_cov = cov_list
-            #     included_views.append(h_cov)
-
-            # h = torch.cat(included_views, 1)  # .type_as(x_mean)
 
         for net in self.linear:
             h = F.elu(net(h))
@@ -213,8 +174,6 @@ class DecoderHMIVAE(nn.Module):
         for net in self.linear:
             out = F.elu(net(out))
 
-        #if self.leave_out_view is None:
-
         h2_mean = F.elu(self.exp_hidden(out[:, 0 : self.E_me]))
         h2_correlations = F.elu(
             self.corr_hidden(out[:, self.E_me : self.E_me + self.E_cr])
@@ -238,7 +197,6 @@ class DecoderHMIVAE(nn.Module):
             )
         )
 
-        # covariates = out[:, self.E_me + self.E_cr + self.E_mr + self.E_sc :]
 
         mu_x_exp = self.mu_x_exp(h2_mean)
         std_x_exp = self.std_x_exp(h2_mean)
@@ -271,60 +229,3 @@ class DecoderHMIVAE(nn.Module):
             std_x_spatial_context,
             # weights,
         )
-
-        # else:
-        #     included_views = []
-
-        #     if self.leave_out_view != "expression":
-        #         h2_mean = F.elu(self.exp_hidden(out[:, 0 : self.E_me]))
-        #         mu_x_exp = self.mu_x_exp(h2_mean)
-        #         std_x_exp = self.std_x_exp(h2_mean)
-
-        #         included_views.append(mu_x_exp)
-        #         included_views.append(std_x_exp)
-
-        #     if self.leave_out_view != "correlation":
-        #         h2_correlations = F.elu(
-        #             self.corr_hidden(out[:, self.E_me : self.E_me + self.E_cr])
-        #         )
-        #         mu_x_corr = self.mu_x_corr(h2_correlations)
-        #         std_x_corr = self.std_x_corr(h2_correlations)
-
-        #         included_views.append(mu_x_corr)
-        #         included_views.append(std_x_corr)
-
-        #     if self.leave_out_view != "morphology":
-        #         h2_morphology = F.elu(
-        #             self.morph_hidden(
-        #                 out[
-        #                     :, self.E_me + self.E_cr : self.E_me + self.E_cr + self.E_mr
-        #                 ]
-        #             )
-        #         )
-        #         mu_x_morph = self.mu_x_morph(h2_morphology)
-        #         std_x_morph = self.std_x_morph(h2_morphology)
-
-        #         included_views.append(mu_x_morph)
-        #         included_views.append(std_x_morph)
-
-        #     if self.leave_out_view != "spatial":
-        #         h2_spatial_context = F.elu(
-        #             self.spatial_context_hidden(
-        #                 out[
-        #                     :,
-        #                     self.E_me
-        #                     + self.E_cr
-        #                     + self.E_mr : self.E_me
-        #                     + self.E_cr
-        #                     + self.E_mr
-        #                     + self.E_sc,
-        #                 ]
-        #             )
-        #         )
-        #         mu_x_spatial_context = self.mu_x_spcont(h2_spatial_context)
-        #         std_x_spatial_context = self.std_x_spcont(h2_spatial_context)
-
-        #         included_views.append(mu_x_spatial_context)
-        #         included_views.append(std_x_spatial_context)
-
-        #     return included_views

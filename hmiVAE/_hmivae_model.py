@@ -81,11 +81,9 @@ class hmivaeModel(pl.LightningModule):
         output_dir: str = ".",
         **model_kwargs,
     ):
-        # super(hmivaeModel, self).__init__(adata)
         super().__init__()
 
         self.output_dir = output_dir
-        # self.adata = adata
         self.use_covs = use_covs
         self.use_weights = use_weights
         self.leave_out_view = leave_out_view
@@ -96,7 +94,6 @@ class hmivaeModel(pl.LightningModule):
         if self.use_covs:
             self.keys = []
             for key in adata.obsm.keys():
-                # print(key)
                 if key not in ["correlations", "morphology", "spatial", "xy"]:
                     self.keys.append(key)
 
@@ -105,7 +102,6 @@ class hmivaeModel(pl.LightningModule):
             else:
                 n_covariates = n_covariates
 
-            # print("n_keys", len(self.keys))
         else:
             self.keys = None
             if n_covariates is None:
@@ -119,7 +115,6 @@ class hmivaeModel(pl.LightningModule):
             self.test_batch,
             n_samples,
             self.features_config,
-            # self.cov_list,
         ) = self.setup_anndata(
             adata=adata,
             protein_correlations_obsm_key="correlations",
@@ -137,29 +132,6 @@ class hmivaeModel(pl.LightningModule):
 
         print("n_covs", n_covariates)
 
-        # for batch in self.train_batch:
-        #     print('Y', torch.mean(batch[0],1))
-        #     print('S', torch.mean(batch[1],1))
-        #     print('M', torch.mean(batch[2],1))
-        #     print('C', torch.mean(batch[3],1))
-        #     print('one-hot', batch[4])
-        #     print('covariates', torch.mean(batch[5],1))
-        #     break
-
-        # for batch in self.test_batch:
-        #     print('Y_test', torch.mean(batch[0],1))
-        #     print('S_test', torch.mean(batch[1],1))
-        #     print('M_test', torch.mean(batch[2],1))
-        #     print('C_test', torch.mean(batch[3],1))
-        #     print('one-hot_test', batch[4])
-        #     print('covariates_test', torch.mean(batch[5],1))
-        #     break
-
-        # print("cov_list", self.cov_list.shape)
-
-        # print("self.adata", self.adata.X)
-
-        # self.summary_stats provides information about anndata dimensions and other tensor info
         self.module = module.hmiVAE(
             input_exp_dim=input_exp_dim,
             input_corr_dim=input_corr_dim,
@@ -223,10 +195,7 @@ class hmivaeModel(pl.LightningModule):
         max_epochs=15,
         check_val_every_n_epoch=1,
         config=None,
-    ):  # misnomer, both train and test/val are here (either rename or separate)
-
-        # with wandb.init(config=config):
-        #     config=wandb.config
+    ):  # both train and test/val are here (either rename or separate)
 
         pl.seed_everything(self.random_seed)
 
@@ -241,8 +210,6 @@ class hmivaeModel(pl.LightningModule):
         )
 
         cb_progress = RichProgressBar()
-        # wandb.finish()
-        # wandb_logger = WandbLogger(log_model="all")
 
         if self.leave_out_view is None:
 
@@ -272,8 +239,6 @@ class hmivaeModel(pl.LightningModule):
 
         trainer.fit(self.module, self.train_batch, self.test_batch)
 
-        # wandb.finish()
-
     @torch.no_grad()
     def get_latent_representation(
         self,
@@ -297,9 +262,6 @@ class hmivaeModel(pl.LightningModule):
                 data_train,
                 data_test,
                 _,
-                # cat_list,
-                # train_idx,
-                # test_idx,
             ) = self.setup_anndata(
                 adata,
                 protein_correlations_obsm_key,
@@ -324,8 +286,7 @@ class hmivaeModel(pl.LightningModule):
                     n_covariates=n_covariates,
                     use_covs=use_covs,
                     batch_correct=batch_correct,
-                )  # idx=train_idx)
-
+                )
                 (
                     adata_test.obsm["VAE"],
                     adata_test.obsm["expression_embedding"],
@@ -337,21 +298,20 @@ class hmivaeModel(pl.LightningModule):
                     n_covariates=n_covariates,
                     use_covs=use_covs,
                     batch_correct=batch_correct,
-                )  # idx=test_idx)
-
+                )
             else:
                 adata_train.obsm["VAE"] = self.module.inference(
                     data_train,
                     n_covariates=n_covariates,
                     use_covs=use_covs,
                     batch_correct=batch_correct,
-                )  # idx=train_idx)
+                )
                 adata_test.obsm["VAE"] = self.module.inference(
                     data_test,
                     n_covariates=n_covariates,
                     use_covs=use_covs,
                     batch_correct=batch_correct,
-                )  # idx=test_idx)
+                )
 
             return ad.concat([adata_train, adata_test], uns_merge="first")
         else:
@@ -359,10 +319,8 @@ class hmivaeModel(pl.LightningModule):
                 "No latent representation to produce! Model is not trained!"
             )
 
-    # @setup_anndata_dsp.dedent
     @staticmethod
     def setup_anndata(
-        # self,
         adata: AnnData,
         protein_correlations_obsm_key: str,
         cell_morphology_obsm_key: str,
@@ -464,16 +422,12 @@ class hmivaeModel(pl.LightningModule):
         )
         loader_test = DataLoader(
             data_test, batch_size=batch_size, num_workers=64
-        )  # shuffle=True)
+        )
 
         if image_correct:
             n_samples = len(samples_train)
-            # print("n_samples", n_samples)
-            # print("cat_list", cat_list.shape)
-            print("one-hot+covs", n_samples + n_cats)
         else:
             n_samples = 0
-            print("n_cats", n_cats)
 
         if is_trained_model:
             return (
