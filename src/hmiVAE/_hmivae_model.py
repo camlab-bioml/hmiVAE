@@ -8,14 +8,14 @@ import anndata as ad
 import numpy as np
 import pytorch_lightning as pl
 import torch
-import hmivae
-import hmivae._hmivae_module as module
+import hmiVAE
+import hmiVAE._hmivae_module as module
 from anndata import AnnData
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.trainer import Trainer
 from scipy.stats.mstats import winsorize
-import hmivae.ScModeDataloader as ScModeDataloader
+import hmiVAE.ScModeDataloader as ScModeDataloader
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from pytorch_lightning.callbacks.progress import RichProgressBar

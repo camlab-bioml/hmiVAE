@@ -4,8 +4,8 @@ import numpy as np
 import pytorch_lightning as pl
 import torch
 import torch.nn.functional as F
-import hmivae
-from hmivae._hmivae_base_components import DecoderHMIVAE, EncoderHMIVAE
+import hmiVAE
+from hmiVAE._hmivae_base_components import DecoderHMIVAE, EncoderHMIVAE
 from pytorch_lightning.callbacks import Callback
 
 # from anndata import AnnData

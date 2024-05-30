@@ -6,7 +6,7 @@ from rich.console import Console
 from rich.logging import RichHandler
 #from hmivae import setup_anndata
 
-import hmivae #import hmivaeModel, hmiVAE
+import hmiVAE #import hmivaeModel, hmiVAE
 #from hmivae._hmivae_module import 
 #from ._mypyromodel import MyPyroModel, MyPyroModule
 
