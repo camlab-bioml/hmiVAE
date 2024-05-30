@@ -1,13 +1,25 @@
 Metadata-Version: 2.1
 Name: hmiVAE
-Version: 0.1.0
+Version: 0.1.1
 Summary: hmiVAE: highly multiplexed imaging Variational AutoEncoder
 Author-email: Shanza Ayub <sayub@lunenfeld.ca>
-Classifier: Programming Language :: Python :: 3
-Classifier: License :: OSI Approved :: MIT License
+Keywords: imaging mass cytometry variational autoencoder
+Classifier: Programming Language :: Python :: 3.8
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
 Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scikit-learn
+Requires-Dist: scipy
+Requires-Dist: torch
+Requires-Dist: pytorch-lightning
+Requires-Dist: scanpy
+Requires-Dist: anndata
+Requires-Dist: wandb
+Requires-Dist: typing
 
 # hmiVAE (highly multiplexed imaging Variational AutoEncoder)

@@ -1,0 +1,10 @@
+numpy
+pandas
+scikit-learn
+scipy
+torch
+pytorch-lightning
+scanpy
+anndata
+wandb
+typing

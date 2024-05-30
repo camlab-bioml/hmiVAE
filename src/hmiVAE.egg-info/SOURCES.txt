@@ -9,4 +9,5 @@ src/hmiVAE/_hmivae_module.py
 src/hmiVAE.egg-info/PKG-INFO
 src/hmiVAE.egg-info/SOURCES.txt
 src/hmiVAE.egg-info/dependency_links.txt
+src/hmiVAE.egg-info/requires.txt
 src/hmiVAE.egg-info/top_level.txt
