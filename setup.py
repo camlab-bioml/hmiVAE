@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="hmiVAE",
-    version="0.1.0",
+    version="0.1.1",
     url="https://github.com/camlab-bioml/hmiVAE",
     project_urls={
         "Issues": "https://github.com/camlab-bioml/hmiVAE/issues",
