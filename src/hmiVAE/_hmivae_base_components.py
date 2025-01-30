@@ -7,16 +7,35 @@ import torch.nn.functional as F
 
 class EncoderHMIVAE(nn.Module):
     """Encoder for the case in which data is merged after initial encoding
-    input_exp_dim: Dimension for the original mean expression input
-    input_corr_dim: Dimension for the original correlations input
-    input_morph_dim: Dimension for the original morphology input
-    input_spcont_dim: Dimension for the original spatial context input
-    E_me: Dimension for the encoded mean expressions input
-    E_cr: Dimension for the encoded correlations input
-    E_mr: Dimension for the encoded morphology input
-    E_sc: Dimension for the encoded spatial context input
-    latent_dim: Dimension of the encoded output
-    n_hidden: Number of hidden layers, default=1
+
+    Parameters
+    --------------
+    input_exp_dim
+        Dimension for the original mean expression input
+    input_corr_dim 
+        Dimension for the original correlations input
+    input_morph_dim 
+        Dimension for the original morphology input
+    input_spcont_dim 
+        Dimension for the original spatial context input
+    E_me 
+        Dimension for the encoded mean expressions embedding 
+    E_cr 
+        Dimension for the encoded correlations embedding
+    E_mr 
+        Dimension for the encoded morphology embedding
+    E_sc 
+        Dimension for the encoded spatial context embedding
+    latent_dim 
+        Dimension of the integrated encoded output
+    E_cov
+        Dimension of the covariate embedding
+    n_covariates
+        Number of covariates
+    leave_out_view
+        View to leave out for ablation study
+    n_hidden 
+        Number of hidden layers
     """
 
     def __init__(
@@ -104,16 +123,37 @@ class EncoderHMIVAE(nn.Module):
 class DecoderHMIVAE(nn.Module):
     """
     Decoder for the case where data is merged after inital encoding
-    latent_dim: Dimension of the encoded input
-    E_me: Dimension for the encoded mean expressions input
-    E_cr: Dimension for the encoded correlations input
-    E_mr: Dimension for the encoded morphology input
-    E_sc: Dimension for the encoded spatial context input
-    input_exp_dim: Dimension for the decoded mean expression output
-    input_corr_dim: Dimension for the decoded correlations output
-    input_morph_dim: Dimension for the decoded morphology input
-    input_spcont_dim: Dimension for the decoded spatial context input
-    n_hidden: Number of hidden layers, default=1
+    
+    Parameters
+    --------------
+    
+    latent_dim 
+        Dimension of the integrated encoded output
+    E_me 
+        Dimension for the encoded mean expressions embedding 
+    E_cr 
+        Dimension for the encoded correlations embedding
+    E_mr 
+        Dimension for the encoded morphology embedding
+    E_sc 
+        Dimension for the encoded spatial context embedding
+    input_exp_dim
+        Dimension for the original mean expression input
+    input_corr_dim 
+        Dimension for the original correlations input
+    input_morph_dim 
+        Dimension for the original morphology input
+    input_spcont_dim 
+        Dimension for the original spatial context input
+    E_cov
+        Dimension of the covariate embedding
+    n_covariates
+        Number of covariates
+    n_hidden 
+        Number of hidden layers, default=1
+     leave_out_view
+        View to leave out for ablation study
+    
     """
 
     def __init__(
