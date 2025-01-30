@@ -36,4 +36,4 @@ logger.addHandler(ch)
 # this prevents double outputs
 logger.propagate = False
 
-__all__ = ["setup_anndata", "MyModel", "MyModule", "MyPyroModel", "MyPyroModule"]
+__all__ = ["setup_anndata", "hmiVAEModel", "hmiVAEModule"]
