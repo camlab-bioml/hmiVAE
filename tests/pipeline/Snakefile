@@ -1,0 +1,26 @@
+### Master Snakefile for running all ablation analysis for hmiVAE
+import pandas as pd
+import numpy as np 
+import os
+
+
+#include: 'view_ablation.smk' 
+include: 'prep_input.smk'
+include: 'hyperparameter_tuning.smk'
+
+
+rule all:
+    input:
+        output_h5ad,
+        merged_h5ad,
+        hyperparams_outputs.values(),
+        
+
+
+        #ablation_outputs.values(),
+        # model_outputs.values(),
+        # survival_outputs.values(),
+        #vae_outputs.values(),
+
+
+

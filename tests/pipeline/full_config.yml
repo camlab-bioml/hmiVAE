@@ -1,0 +1,19 @@
+## config for prepping samples and hyperparamter tuning of VAE
+
+cohort: Hoch-Melanoma
+
+cofactor: 1.0
+
+samples_tsv: ../../hmivae_runs/melanoma_imc_samples_paths.tsv # tsv with sample names and their associated tiff and mask files
+
+tidy_output_dir:  ../analysis/cluster_analysis/Hoch-Melanoma/vae_prep
+
+hyperparams_tuning_dir: ../analysis/cluster_analysis/Hoch-Melanoma/hyperparams_tuning
+
+feature_data: ../../melanoma_channels.tsv # tsv with the channel names and order 
+
+#non_proteins: ../../metabric_non_proteins.txt #don't always need this
+
+
+
+

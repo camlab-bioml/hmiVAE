@@ -1,0 +1,56 @@
+# Snakefile for running the best combination of hyperparameters
+
+import pandas as pd 
+import numpy as np 
+import os
+
+cohorts = ['Jackson-BC', 'Ali-BC', 'Hoch-Melanoma']
+
+cofactors = {'Jackson-BC': 5.0, 'Ali-BC': 0.8, 'Hoch-Melanoma': 1.0}
+
+
+
+
+runs = {
+    'Ali-BC': [2, 32, 20, 'warmup', 1234, 4000,'Ali-BC_vae_out_nh2_hd32_ls20_betawarmup_rs1234_bs4000'],
+    'Jackson-BC': [1, 64, 20, 'warmup', 123, 8000, 'Jackson-BC_vae_out_nh1_hd64_ls20_betawarmup_rs123_bs8000'],
+    'Hoch-Melanoma': [1, 64, 20, 'warmup', 123, 16000, 'Hoch-Melanoma_vae_out_nh1_hd64_ls20_betawarmup_rs123_bs16000'],
+} # most recent
+
+
+outputs = expand("../../analysis/cluster_analysis/{cohort}/best_run_{cohort}_out/{cohort}_adata_new.h5ad", cohort=cohorts) # change this to where your files are saved
+
+rule all:
+    input:
+        outputs,
+
+rule make_umaps:
+    output:
+        "../../analysis/cluster_analysis/{cohort}/best_run_{cohort}_out/{cohort}_adata_new.h5ad",
+    input:
+        adata = "../../analysis/cluster_analysis/{cohort}/vae_prep/all_samples_merged_vae.h5ad"
+    params:
+        n_hidden = lambda wildcards: runs[wildcards.cohort][0],
+        hidden_dim = lambda wildcards: runs[wildcards.cohort][1],
+        latent_dim = lambda wildcards: runs[wildcards.cohort][2],
+        beta_scheme = lambda wildcards: runs[wildcards.cohort][3],
+        random_seed = lambda wildcards: runs[wildcards.cohort][4],
+        batch_size = lambda wildcards: runs[wildcards.cohort][5],
+        cofactor = lambda wildcards: cofactors[wildcards.cohort],
+        best_epoch_dir = lambda wildcards: f"../../analysis/cluster_analysis/{wildcards.cohort}/hyperparams_tuning/{runs[wildcards.cohort][-1]}",
+        output_dir = lambda wildcards: f"../../analysis/cluster_analysis/{wildcards.cohort}/best_run_{wildcards.cohort}_out/",
+    
+    shell:
+        "python make_umaps.py --adata {input.adata} "
+        "--cofactor {params.cofactor} --cohort {wildcards.cohort} "
+        "--batch_size {params.batch_size} "
+        "--beta_scheme {params.beta_scheme} "
+        "--hidden_dim_size {params.hidden_dim}  "
+        "--latent_dim {params.latent_dim} "
+        "--random_seed {params.random_seed} "
+        "--n_hidden {params.n_hidden} "
+        "--checkpoint_dir {params.best_epoch_dir} "
+        "--output_dir {params.output_dir} "
+
+        
+
