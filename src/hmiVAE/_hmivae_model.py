@@ -28,27 +28,60 @@ logger = logging.getLogger(__name__)
 
 class hmivaeModel(pl.LightningModule):
     """
-    Skeleton for an scvi-tools model.
+    hmiVAEModel using the skeleton for an scvi-tools model.
 
     Parameters
     ----------
     adata
-        AnnData object that has been registered via :meth:`~mypackage.MyModel.setup_anndata`.
+        AnnData object that has been processed via :meth:`hmiVAE.ScModeDataloader.setup_anndata`.
+    input_exp_dim
+        Number of expression features
+    input_corr_dim
+        Number of correlation/nuclear co-localization features
+    input_morph_dim
+        Number of morphology features
+    input_spcont_dim
+        Number of spatial context features
+    E_me
+        Size of the expression only embedding space
+    E_cr
+        Size of the correlation/nuclear co-localization only embedding space
+    E_mr
+        Size of the morphology only embedding space
+    E_sc
+        Size of the spatial context only embedding space
+    E_cov
+        Size of the embedding for covariates
+    latent_dim
+        Size of the integrated latent space
+    use_covs
+        Use the covariates or not
+    use_weights
+        Include weights for the correlations or not
+    n_covariates
+        Number of covariates
+    cohort
+        Name of dataset
     n_hidden
-        Number of nodes per hidden layer.
-    n_latent
-        Dimensionality of the latent space.
-    n_layers
-        Number of hidden layers used for encoder and decoder NNs.
+        Number of hidden layers
+    cofactor
+        Cofactor for arcsinh normalization of the data
+    beta_scheme
+        Scheme for the KL divergence term in the loss function
+    batch_correct
+        Correct batch effects
+    is_trained_model
+        Is this a trained model?
+    batch_size
+        Batch size being used
+    random_seed
+        Random seed for reproducibility
+    leave_out_view
+        Leave out any view for ablation study
+    output_dir
+        Output directory to save files
     **model_kwargs
-        Keyword args for :class:`~mypackage.MyModule`
-    Examples
-    --------
-    >>> adata = anndata.read_h5ad(path_to_anndata)
-    >>> mypackage.MyModel.setup_anndata(adata, batch_key="batch")
-    >>> vae = mypackage.MyModel(adata)
-    >>> vae.train()
-    >>> adata.obsm["X_mymodel"] = vae.get_latent_representation()
+        Keyword args for :class:`hmiVAE._hmivae_module.module`
     """
 
     def __init__(
